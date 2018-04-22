@@ -27,3 +27,29 @@ output:
 \newpage
 
 # Definitions
+## Imperative vs Declarative
+### Imperative
+- Series of instructions
+- Iterative functions
+- Command driven, statement oriented
+- Procedural
+  - C
+  - Pascal
+  - Assembly
+- Object oriented
+  - C++
+  - Java
+
+### Declarative
+- No side effects
+- Focus on relations
+- "What to get" instead of "How to get"
+- Order of statements *shouldn't* matter
+- Examples:
+  - SQL
+  - Prolog
+  - Regex
+
+## Scope vs Visibility
+### Scope
+- foo

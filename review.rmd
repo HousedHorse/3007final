@@ -81,7 +81,22 @@ output:
   - go as deep as you can until you hit primitives, then evaluate and go back
   - as deep into the nest as possible and work backwards
 
+```
+(double (* (+ 1 3) 4))
+(double (* 4 4))
+(double 16)
+(* 16 2)
+32
+```
+
 ### Normal Order Evaluation
 - **Lazy evaluation**
 - Evaluate an expression *only* when its value is needed
   - first **expand**, then **reduce**
+```
+(double (* (+ 1 3) 4))
+(* (* (+ 1 3) 4) 2)
+(* (* 4 4) 2)
+(* 16 2)
+32
+```

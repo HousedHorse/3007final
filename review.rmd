@@ -27,6 +27,8 @@ output:
 \newpage
 
 # Definitions
+Define the following terms and provide examples or sample code as appropriate.
+
 ## Imperative vs Declarative
 ### Imperative
 - Series of instructions
@@ -74,29 +76,88 @@ output:
   - that enclosing scope variable is now hidden
   - all references to *name* are to our locally scoped variable instead
 
+## Lexical Scope vs Dynamic Scope
+### Lexical
+- Function scope is enclosed in the scope which *defined us*
+  - if you can't find a binding, recursively search in the function that defined you
+
+### Dynamic
+- Function scope is enclosed in the scope which *called us*
+  - if you can't find a binding, recursively search in the function that called you
+
+## Free Variables
+- **Used locally** but **bound in an enclosing scope**
+- In the following example:
+  ```
+  (define (f x y)
+    (define z 2)
+    (define (g)
+      (* x y z)
+    )
+  )
+  ```
+  - `x,y,z` are free variables in `(g)`
+
 ## Applicative Order Evaluation vs Normal Order Evaluation
 ### Applicative Order Evaluation
 - **Strict evaluation**
 - Evaluate an expression *before* it is passed in as an argument
   - go as deep as you can until you hit primitives, then evaluate and go back
   - as deep into the nest as possible and work backwards
-
-```
-(double (* (+ 1 3) 4))
-(double (* 4 4))
-(double 16)
-(* 16 2)
-32
-```
+  - e.g.,
+    ```
+    (double (* (+ 1 3) 4))
+    (double (* 4 4))
+    (double 16)
+    (* 16 2)
+    32
+    ```
 
 ### Normal Order Evaluation
 - **Lazy evaluation**
 - Evaluate an expression *only* when its value is needed
   - first **expand**, then **reduce**
-```
-(double (* (+ 1 3) 4))
-(* (* (+ 1 3) 4) 2)
-(* (* 4 4) 2)
-(* 16 2)
-32
-```
+  - e.g.,
+    ```
+    (double (* (+ 1 3) 4))
+    (* (* (+ 1 3) 4) 2)
+    (* (* 4 4) 2)
+    (* 16 2)
+    32
+    ```
+
+## Special Forms
+- **Exceptions** to the usual evaluation order
+  - they have their own evaluation rules
+  - e.g., take the first argument without evaluating right away, evaluate the second symbol right away
+- Use constructs like `(delay foo)`, `(force foo)` behind the scenes
+
+## Tail Recursion
+- **Linear iterative processes** in Scheme
+- No *deferred operations*
+  - **recusrive call** is the **last operation** of the procedure
+- In Scheme, recursion is *tail optimized*
+  - this means that it will run in *constant space*
+  - number of steps will **grow linearly**, but memory will **remain constant**
+- Even though the *program* is still recursive, the *process* is linear iterative because of tail-recursion optimization
+- E.g., to compute a factorial using tail recursion, we do the following:
+  ```
+  (define (factorial x)
+    (define (iter prod i)
+      (if (> i x)
+        prod
+        (iter (* i prod) (+ i 1))
+      )
+    )
+    (iter 1 1)
+  )
+  ```
+- To compute a factorial using normal recursion, we would do the following instead:
+  ```
+  (define (factorial x)
+    (if (= x 1)
+      x
+      (* x (factorial - x 1))
+    )
+  )
+  ```

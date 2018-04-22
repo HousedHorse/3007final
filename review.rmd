@@ -1,0 +1,29 @@
+
+---
+author: 
+- William Findlay
+title: 3007 Final Exam Review 
+date: \today
+bibliography: /home/housedhorse/.bibs/uni.bib
+csl: /home/housedhorse/.bibs/ieee.csl
+header-includes:
+  \usepackage{float}
+  \let\origfigure\figure
+  \let\endorigfigure\endfigure
+  \renewenvironment{figure}[1][2] {
+      \expandafter\origfigure\expandafter[H]
+  } {
+      \endorigfigure
+  }
+output:
+  pdf_document:
+    number_sections: true
+    fig_crop: true
+    fig_caption: true
+    keep_tex: false
+---
+\newpage
+\tableofcontents
+\newpage
+
+# Definitions

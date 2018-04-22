@@ -52,4 +52,14 @@ output:
 
 ## Scope vs Visibility
 ### Scope
-- foo
+- The set of expressions for which the variable exists
+- In lexical scoping
+  - variables in the scope we were *defined* in
+- In dynamic scoping
+  - variables in the scope we were *called* in
+
+### Visibility
+- The set of expressions for which the variable *can be reached*
+- If we **declare a local variable** with the *same name* as a variable in parent scope
+  - that parent scope variable is now hidden
+  - all references to *name* are to our locally coped variable instead

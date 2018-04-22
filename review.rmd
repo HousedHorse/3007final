@@ -56,12 +56,32 @@ output:
 - In lexical scoping
   - variables in the scope we were *defined* in
   - and local variables
+  - who uses this?
+    - C-family languages
+    - Scheme
+    - Algol
 - In dynamic scoping
   - variables in the scope we were *called* in
   - and local variables
+  - who uses this?
+    - early LISP
+    - APL
+    - BASH
 
 ### Visibility
 - The set of expressions for which the variable *can be reached*
 - If we **declare a local variable** with the *same name* as a variable in enclosing scope
   - that enclosing scope variable is now hidden
   - all references to *name* are to our locally scoped variable instead
+
+## Applicative Order Evaluation vs Normal Order Evaluation
+### Applicative Order Evaluation
+- **Strict evaluation**
+- Evaluate an expression *before* it is passed in as an argument
+  - go as deep as you can until you hit primitives, then evaluate and go back
+  - as deep into the nest as possible and work backwards
+
+### Normal Order Evaluation
+- **Lazy evaluation**
+- Evaluate an expression *only* when its value is needed
+  - first **expand**, then **reduce**

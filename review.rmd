@@ -165,7 +165,9 @@ Define the following terms and provide examples or sample code as appropriate.
 
 ## First Class and Higher Order Procedures
 ### First Class Procedures
-- When procedures can be **passed as arguments** into other procedures
+- When procedures (functions) behave like variables
+  - procedures can be *passed as arguments* into other procedures
+  - or they can be *returned* from another procedure
 - E.g.,
   ```{Scheme}
   (define (f g)
@@ -176,5 +178,40 @@ Define the following terms and provide examples or sample code as appropriate.
   )
   (f h) ; this would yield (+ 2 3), which evaluates to 5
   ```
+- This is how *closures* work
+  - more on this in a following subsection
 
 ### Higher Order Procedures
+- A procedure which *accepts one or more procedure(s)* as argument(s)
+- In other words, a procedure which *uses* the **first class procedures** property of a language
+- In the above codeblock, `(f g)` is an example of a **higher order procedure**
+
+## Closures
+- When a nested function is *returned* by its **enclosing scope**
+- In practice, the returned function is typically a `lambda` (anonymous procedure)
+- E.g.,
+  ```{Scheme}
+  (define (multBy x)
+    (lambda (y)(* x y)) ; lambda captures the free variable x
+  )
+
+  ((multBy 12) 3) ; 36
+
+  (define (double) (multBy 2))
+  (define (triple) (multBy 3))
+
+  (double 2) ; 4
+  (triple 2) ; 6
+  ```
+
+## Abstraction Barriers
+- **Hide implementation** within complex procedures
+  - user does not need to know how they work
+  - they need only be guaranteed that they *will* work
+- Prevents pollution of the global namespace
+- Prevents excess free variables
+
+## Referential Transparency
+- The idea that *references* can be substituted for their values without changing result of an expression
+- Purely functional languages are referentially transparent
+- Imperative languages are *by definition* **not** referentially transparent

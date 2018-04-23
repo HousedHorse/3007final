@@ -263,3 +263,19 @@ Define the following terms and provide examples or sample code as appropriate.
   - attempt another clause to satisfy the subgoal
   - if we are out of clauses to try, undo a previously satisfied subgoal and attempt to satisfy it another way
     - if we are out of subgoals, we can fail
+
+# Scheme Comprehension
+What is the output of the following expressions/programs?
+
+1. `(+ (* 3 4)(- 5 2 1)(/ 8 2))`
+2. `(and (> (+ (* 3 4)(- 5 2 1)(/ 8 2)) 0)(or (= (- 4 5)(+ 3 6 (* 10 -1)))(>= (* (/ 16 4)(+ 1 (* 3 2)(- 31 29)))(+ (* 3 4)(- 5 2 1)(* 8 2)))))`
+3. `(let ((l (+ 2 1))(e (/ 16(* 4 4)))(t (length '(5 7)))) (if (< l e) t 0))`
+4. `((lambda (x y) (+ 3 x (* 2 y))) (+ 3 3)(* 2 2))`
+5. `(let ((a (lambda (b c)(* b c)))(b 10)(c 5))(+ (a 3 2) b c))`
+6. `(define (x y z)((lambda (y z)(- y z)) z y)) (x 3 5)`
+7. `(define (foo y) ((lambda (x) y) ((lambda (y)(* y y)) y))) (foo 3)`
+8. `(((lambda(x)(lambda(y)(+ x y))) 12) ((lambda(z)(* 3 z)) 3))`
+9. `((lambda (a b c)(list '(a b c) (list a b c) a 'b c)) 1 2 3)`
+10. `(((lambda (a)(lambda (b) '(lambda (c) '(a b c)))) 1) 2)`
+11. `(eval '(let ((a (lambda(x y)(list x y)))(b 2)(c 3))(list (a b 'c) '(a b c)))`  
+`(interaction-environment))`

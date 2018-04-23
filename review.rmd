@@ -215,3 +215,51 @@ Define the following terms and provide examples or sample code as appropriate.
 - The idea that *references* can be substituted for their values without changing result of an expression
 - Purely functional languages are referentially transparent
 - Imperative languages are *by definition* **not** referentially transparent
+
+## Clause (Prolog)
+- **Facts** and **rules** about the domain
+- They specify truths and relations between symbols/entries in the domain
+  - facts:
+    - `cold(ottawa).`
+    - `rainy(ottawa).`
+  - rules:
+    - `icy(X):- cold(X),rainy(X).`
+- **Read from a file** or **asserted** in the REPL with `assert()`
+- **Removed** with `retract()`
+
+## Unification
+- Prolog attempts to unify variables, atoms, and predicates
+  - predicates unify with predicates with the same number of functors and if the functors can be unified
+  - variables unify with variables and atoms
+  - an atom will always unify with itself
+- The query succeeds if all *can be unified*
+  - fails otherwise
+
+## Resolution
+- *Algorithm* to resolve queries
+- The algorithm:
+  ```
+  Resolve:
+    Input:  A query Q and program P
+    Output: True if Q can be inferred by P, false otherwise
+
+    Algorithm:
+      Start with a goal G, initially set to Q
+        Attempt to unify the first subgoal G1 from G
+
+        If no unification possible, then backtrack
+          If no backtrack possible, FAIL
+        Else, extend the goal G to G' with the following:
+          If unified with a rule, substitute G1 with the body of that rule
+          If unified with a fact, remove G1 from F
+
+        If G' is empty, SUCCESS
+        Else, Resolve G'
+  ```
+- **If a clause unifies** with a goal, it satisfies the goal
+  - a **fact** satisfies the goal immediately
+  - a **rule** substitutes subgoals for the original goal
+- **Backtracking** here means the following:
+  - attempt another clause to satisfy the subgoal
+  - if we are out of clauses to try, undo a previously satisfied subgoal and attempt to satisfy it another way
+    - if we are out of subgoals, we can fail

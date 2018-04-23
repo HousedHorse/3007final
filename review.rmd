@@ -402,6 +402,8 @@ Show the substitution model using normal and applicative order for the following
 ```
 
 # Lists and Iteration (in Scheme)
+Implement or answer questions about the following procedures related to lists and iteration in Scheme:
+
 a) Define procedures `map`, `filter`, and `reduce`.
     ```{Scheme}
     (define (map f L)
@@ -431,9 +433,83 @@ a) Define procedures `map`, `filter`, and `reduce`.
     ```
 b) Define a procedure `(last L)` that returns the last element of the list `L`.
     ```{Scheme}
+    (define (last L)
+      (cond
+        ((null? (cdr L)) (car L))
+        (else (last (cdr L)))
+        )
+      )
     ```
+c) Define a procedure `(remaining n L)` that returns a list containing all but the first `n` items in the list.
+    ```{Scheme}
+    (define (remaining n L)
+      (cond
+        ((null? L) L)
+        ((= n 0) L)
+        (else (remaining (- n 1) (cdr L)))
+        )
+      )
+    ```
+d) Define a procedure `(leading n L)` that returns a list containing ONLY the first `n` items.
+    ```{Scheme}
+    (define (leading n L)
+      (cond
+        ((null? L) L)
+        ((<= n 0) '())
+        (else (cons (car L) (leading (- n 1) (cdr L))))
+        )
+      )
+    ```
+e) Define a procedure `reverse` that takes a list as argument and returns a list of the same elements in reverse order.
+    ```{Scheme}
+    (define (reverse L)
+      (define (iter f r)
+        (cond
+          ((null? f) r)
+          (else (iter (cdr f) (cons (car f) r)))
+          )
+        )
+      (iter L '())
+      )
+    ```
+f) Define a procedure `smallest-it` that takes a list of numbers as argument and uses an iterative process to return the smallest item in the list. You may assume the list is non empty.
+    ```{Scheme}
+    (define (smallest-it L)
+      (define (iter L s)
+        (cond
+          ((null? L) s)
+          ((not s) (iter (cdr L) (car L)))
+          ((< (car L) s) (iter (cdr L) (car L)))
+          (else (iter (cdr L) s))
+          )
+        )
+      (iter L #f)
+      )
+    ```
+g) Define a procedure `smallest-rec` that takes a list of numbers as argument and uses an recursive process to return the smallest item in the list. You may assume the list is non empty.
+    ```{Scheme}
+    (define (smallest-rec L)
+      (define (min x y)
+        (if (< x y) x y)
+        )
+      (if (null? (cdr L))
+          (car L)
+          (min (car L) (smallest-rec (cdr L)))
+          )
+      )
+    ```
+h) Use the substitution model for `(smallest-<it/rec> '(5 3 1 7 4 2))` to show that your answers to the previous two questions are recursive/iterative.
+    i) Substitution model for `(smallest-it '(5 3 1 7 4 2))`:
+        ```{Scheme}
+        (smallest-it '(5 3 1 7 4 2))
+        ```
+    ii) Substitution model for `(smallest-rec '(5 3 1 7 4 2))`:
+        ```{Scheme}
+        (smallest-rec '(5 3 1 7 4 2))
+        ```
 
 # Streams
+This will not be on this year's final exam. We can safely forget it exists.
 
 # Contour Models
 

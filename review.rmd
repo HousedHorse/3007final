@@ -227,7 +227,7 @@ Define the following terms and provide examples or sample code as appropriate.
 - **Read from a file** or **asserted** in the REPL with `assert()`
 - **Removed** with `retract()`
 
-## Unification
+## Unification (Prolog)
 - Prolog attempts to unify variables, atoms, and predicates
   - predicates unify with predicates with the same number of functors and if the functors can be unified
   - variables unify with variables and atoms
@@ -235,7 +235,7 @@ Define the following terms and provide examples or sample code as appropriate.
 - The query succeeds if all *can be unified*
   - fails otherwise
 
-## Resolution
+## Resolution (Prolog)
 - *Algorithm* to resolve queries
 - The algorithm:
   ```
@@ -502,10 +502,29 @@ h) Use the substitution model for `(smallest-<it/rec> '(5 3 1 7 4 2))` to show t
     i) Substitution model for `(smallest-it '(5 3 1 7 4 2))`:
         ```{Scheme}
         (smallest-it '(5 3 1 7 4 2))
+        (iter '(5 3 1 7 4 2) #f)
+        (iter '(3 1 7 4 2) 5)
+        (iter '(1 7 4 2) 3)
+        (iter '(7 4 2) 1)
+        (iter '(4 2) 1)
+        (iter '(2) 1)
+        (iter '() 1)
+        1
         ```
     ii) Substitution model for `(smallest-rec '(5 3 1 7 4 2))`:
         ```{Scheme}
         (smallest-rec '(5 3 1 7 4 2))
+        (min 5 (smallest-rec '(3 1 7 4 2)))
+        (min 5 (min 3 (smallest-rec '(1 7 4 2))))
+        (min 5 (min 3 (min 1 (smallest-rec '(7 4 2)))))
+        (min 5 (min 3 (min 1 (min 7 (smallest-rec '(4 2))))))
+        (min 5 (min 3 (min 1 (min 7 (min 4 (smallest-rec '(2)))))))
+        (min 5 (min 3 (min 1 (min 7 (min 4 2)))))
+        (min 5 (min 3 (min 1 (min 7 2))))
+        (min 5 (min 3 (min 1 2)))
+        (min 5 (min 3 1))
+        (min 5 1)
+        1
         ```
 
 # Streams

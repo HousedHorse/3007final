@@ -295,12 +295,143 @@ Output: `((2 c) (a b c))`
 Show the substitution model using normal and applicative order for the following examples:
 
 ## First Example
+```{Scheme}
+(define (f x)(+ x (* 2 x)))
+(define (g y)(* 10 (f y)))
+(g (+ 1 2 3))
+```
+
+### Applicative Order
+```{Scheme}
+(g (+ 1 2 3))
+(g 6)
+(* 10 (f 6))
+(* 10 (+ 6 (* 2 6)))
+(* 10 (+ 6 12))
+(* 10 18)
+180
+```
+
+### Normal Order
+```{Scheme}
+(g (+ 1 2 3))
+(* 10 (f (+ 1 2 3)))
+(* 10 (+ (+ 1 2 3) (* 2 (+ 1 2 3))))
+(* 10 (+ (+ 1 2 3) (* 2 6)))
+(* 10 (+ 6 12))
+(* 10 18)
+180
+```
 
 ## Second Example
+```{Scheme}
+(define (abs x)
+(if (< x 0) (- x) x))
+(define (square x) (* x x))
+(define (inc x)(+ x 1))
+(+ (abs (- 75 100))(square (inc (abs (* -2 3)))))
+```
+
+### Applicative Order
+```{Scheme}
+(+ (abs -25)(square (inc (abs (* -2 3)))))
+(+ (- -25)(square (inc (abs (* -2 3)))))
+(+ 25 (square (inc (abs (* -2 3)))))
+(+ 25 (square (inc (abs -6))))
+(+ 25 (square (inc (- -6))))
+(+ 25 (square (inc 6)))
+(+ 25 (square (+ 6 1)))
+(+ 25 (square 7))
+(+ 25 (* 7 7))
+(+ 25 49)
+74
+```
+
+### Normal Order
+```{Scheme}
+(+ (abs (- 75 100))(square (inc (abs (* -2 3)))))
+(+ (- (- 75 100))(square (inc (abs (* -2 3)))))
+(+ (- (- 75 100))(* (inc (abs (* -2 3)))(inc (abs (* -2 3)))))
+(+ (- (- 75 100))(* (+ (abs (* -2 3)) 1)(+ (abs (* -2 3)) 1)))
+(+ (- (- 75 100))(* (+ (- (* -2 3)) 1)(+ (- (* -2 3)) 1)))
+(+ (- -25)(* (+ (- (* -2 3)) 1)(+ (- (* -2 3)) 1)))
+(+ 25 (* (+ (- (* -2 3)) 1)(+ (- (* -2 3)) 1)))
+(+ 25 (* (+ (- -6) 1)(+ (- -6) 1)))
+(+ 25 (* (+ 6 1)(+ 6 1)))
+(+ 25 (* 7 7))
+(+ 25 49)
+74
+```
 
 # Data Abstraction
+```{Scheme}
+; make a point
+(define (make-point x y)
+  (list x y)
+)
+
+; define get x of a point
+(define (x-point p)
+  (car p)
+)
+; define get y of a point
+(define (y-point p)
+  (cadr p)
+)
+
+; make a line segment
+(define (make-segment x1 y1 x2 y2)
+  (list (make-point x1 y1) (make-point x2 y2))
+)
+; get start of segment
+(define (start-segment s)
+  (car s)
+)
+; get end of segment
+(define (end-segment s)
+  (cadr s)
+)
+; get midpoint of a segment
+(define (midpoint-segment s)
+  (make-point (/ (+ (x-point (start-segment s))
+                    (x-point (end-segment s))) 2)
+              (/ (+ (y-point (start-segment s))
+                    (y-point (end-segment s))) 2)
+              )
+)
+```
 
 # Lists and Iteration (in Scheme)
+a) Define procedures `map`, `filter`, and `reduce`.
+    ```{Scheme}
+    (define (map f L)
+      (cond
+        ((null? L) L)
+        (else (cons (f (car L)) (map f (cdr L))))
+        )
+      )
+
+    (define (filter f L)
+      (cond
+        ((null? L) L)
+        ((f (car L))(cons (car L) (filter f (cdr L))))
+        (else (filter f (cdr L)))
+        )
+      )
+
+    (define (reduce f L init)
+      (define (helper v L)
+        (cond
+          ((null? L) v)
+          (else (helper (f v (car L)) (cdr L)))
+          )
+        )
+      (helper init L)
+      )
+    ```
+b) Define a procedure `(last L)` that returns the last element of the list `L`.
+    ```{Scheme}
+    ```
 
 # Streams
 

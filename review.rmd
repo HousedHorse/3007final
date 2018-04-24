@@ -401,7 +401,7 @@ Show the substitution model using normal and applicative order for the following
 )
 ```
 
-# Lists and Iteration (in Scheme)
+# Lists and Iteration (Scheme)
 Implement or answer questions about the following procedures related to lists and iteration in Scheme:
 
 a) Define procedures `map`, `filter`, and `reduce`.
@@ -526,12 +526,111 @@ h) Use the substitution model for `(smallest-<it/rec> '(5 3 1 7 4 2))` to show t
         (min 5 1)
         1
         ```
+i) Define a procedure `makeChange` that takes a `cost` and a `payment` as arguments and returns a list of change in the following format: `(dollars quarters dimes nickels pennies)`. *Note*: You can cast a floating point number to an integer using: `(inexact->exact (floor floatNum))`. 
+    ```{Scheme}
+    (define (makeChange c p)
+      (define (iter t d)
+        (if (null? d)
+            '()
+            (cons (inexact->exact (floor (/ t (car d))))
+                  (iter (modulo t (car d)) (cdr d))
+                  )
+            )
+        )
+      (if (< p c)
+          "Insufficient funds!"
+          (iter (* (- p c) 100) '(100 25 10 5 1))
+          )
+      )
+    ```
+j) Define a recursive procedure called `(subsets x)` that takes a list as a single argument and returns all $2^n$ subsets of that list, i.e., the *powerset* of the list (order is not important).
+    ```{Scheme}
+    (define (subsets x)
+      (if (null? x) '(())
+          (append  (subsets (cdr x))
+                   (map (lambda (y) (append (list (car x)) y))
+                        (subsets (cdr x))
+                        )
+                   )
+          )
+      )
+    ```
+k) 
+Define a procedure called `(treemerge t1 t2)` that takes two trees (arbitrarily nested lists) and returns the result of merging the two trees using the following guidelines:
+    - Merging two trees is done by recursing through their structure and multiplying their subtrees
+      - The root of `t1` is merged with the root of `t2`
+      - The first child is merged with the first child
+      - Second with second... etc, etc, etc, ...
+    - Merging two leaf nodes is done by multiplying their values (you may assume they are numbers).
+    - Merging a leaf node with a subtree is done by scaling the subtree by the value of the leaf.
+    - Merging a subtree with an empty tree, is simply the non-empty subtree.
+    ```{Scheme}
+    (define (tree-scale c t)
+      (cond
+        ((null? t) '())
+        ((list? (car t)) (cons (tree-scale c (car t)) (tree-scale c (cdr t))))
+        (else (cons (* c (car t)) (tree-scale c (cdr t))))
+        )
+      )
+
+    (define (tree-merge t1 t2)
+      (cond
+        ((null? t1) t2)
+        ((null? t2) t1)
+        ((and (list? (car t1)) (list? (car t2))) (cons (tree-merge (car t1) (car t2))
+                                                       (tree-merge (cdr t1) (cdr t2))))
+        ((and (number? (car t1)) (list? (car t2))) (cons (tree-scale (car t1) (car t2))
+                                                         (tree-merge (cdr t1) (cdr t2))))
+        ((and (list? (car t1)) (number? (car t2))) (cons (tree-scale (car t2) (car t1))
+                                                         (tree-merge (cdr t1) (cdr t2))))
+        (else (cons (* (car t1) (car t2)) (tree-merge (cdr t1) (cdr t2))))
+        )
+      )
+    ```
 
 # Streams
 This will not be on this year's final exam. We can safely forget it exists.
 
-# Contour Models
+# Contour Diagrams
+## First Example
+Given the following code, draw contour diagrams at each stage in the recursion (i.e., one diagram each time it reaches line `03`).
+```{Scheme}
+01| (define (f n)
+02|   (define (iter n1 n2 n3 n4 count)
+03|    (if (> count n) n1
+04|    	(iter (+ (* 4 n1) (* 3 n2) (* 2 n3) (* 1 n4)) n1 n2 n3 (+ count 1))))
+05|   (if (< n 4) n
+06|      (iter 3 2 1 0 4)))
+07| (define r (f 6))
+```
 
-# MCI
+![First recursive stage.](img/contour1a.png){height=44%}
+
+![Second recursive stage.](img/contour1b.png){height=44%}
+
+![Third recursive stage.](img/contour1c.png){height=44%}
+
+![Fourth and final recursive stage.](img/contour1d.png){height=44%}
+
+## Second Example
+Given the following code, draw contour diagrams for each non-base-case stage in the recursion (i.e., one diagram each time it reaches line `03`). Then do the same for **dynamic scoping** instead of lexical scoping. Does the output of the code change? Why or why not?
+```{Scheme}
+01| (define (f-rec n)
+02|   (if (< n 4) n
+03|      (+ (* 4 (f-rec (- n 1)))
+04|         (* 3 (f-rec (- n 2)))
+05|         (* 2 (f-rec (- n 3)))
+06|         (* 1 (f-rec (- n 4)))
+07|         )))
+08| (define r (f-rec 6))
+```
+
+### Lexical Scoping
+
+### Dynamic Scoping
+
+### Does the Output Change?
+
+# Meta-Circular Interpreter
 
 # Prolog

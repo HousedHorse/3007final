@@ -627,9 +627,97 @@ Given the following code, draw contour diagrams for each non-base-case stage in 
 
 ### Lexical Scoping
 
+![The first recursive step in lexical scoping.](img/contour2a.png){height=44%}
+
+![The second recursive step in lexical scoping.](img/contour2b.png){height=44%}
+
+![The third recursive step in lexical scoping.](img/contour2c.png){height=44%}
+
 ### Dynamic Scoping
 
+![The first recursive step in dynamic scoping.](img/contour2d.png){height=40%}
+
+![The second recursive step in dynamic scoping.](img/contour2e.png){height=40%}
+
+![The third recursive step in dynamic scoping.](img/contour2f.png){height=44%}
+
 ### Does the Output Change?
+The output does not change because there are no free variables. The difference between lexical and dynamic scoping is primarily the way they deal with free variables.
+
+## Third Example
+Given the following code:
+```{Scheme}
+01| (define (boxcar a b h)
+02|		(lambda(x)(if (and (>= x a)(<= x b)) h 0)))
+03|
+04| (define f1 (boxcar 5 10 1))
+05| (define f2 (boxcar 1 3 20))
+06| (define result1 (f1 6))
+07| (define result2 (f2 6))
+```
+Draw contour diagrams for the following points of execution:
+
+![Contour diagram at the end of line `04`.](img/contour3a.png){height=44%}
+
+![Contour diagram at the end of line `05`.](img/contour3b.png){height=44%}
+
+![Contour diagram in the middle of line `06`, during the call to `f1`.](img/contour3c.png){height=44%}
+
+![Contour diagram at the end of line `07`.](img/contour3d.png){height=44%}
+
+## Fourth Example
+Using your implementation of `make-list` from assignment 4, draw contour diagrams at the following points in this code:
+```{Scheme}
+01-60|  ; your list implementation here...
+61| (define L1 (make-list))
+62| ((L1 'add) 0 'a)
+63| ((L1 'add) 1 'b)
+64| ((L1 'add) 0 'c)
+65| ((L1 'set) 2 'd)
+66| (define len ((L1 'size)))
+```
+
+![Contour diagram at the end of line `61`.](img/contour4a.png){height=44%}
+
+![Contour diagram at the end of line `62`.](img/contour4b.png){height=44%}
+
+![Contour diagram in the middle of line `63`, during the execution of `((L1 'add) 1 'b)`.](img/contour4c.png){height=44%}
+
+![Contour diagram at the end of line `65`.](img/contour4d.png){height=44%}
+
+![Contour diagram at the end of line `66`.](img/contour4e.png){height=44%}
+
+## Fifth Example
+Draw contour diagrams for the various points in the execution of the following code:
+```{Scheme}
+01|	(define (triple x y z)
+02|	  (lambda (m) (m x y z))) 
+03|	(define (first t)
+04|	  (t (lambda (x y z) x)))
+05|	(define (second t)
+06|	  (t (lambda (x y z) y)))
+07|	(define (third t)
+08|	  (t (lambda (x y z) z)))
+09|	(define a1 (triple 1 2 3))
+10|	(define a2 (triple 4 5 6))
+11|	(first a1)
+12|	(define a3 (second a2))
+13|	(define a4 (triple a1 a2 a3))
+```
+
+![Contour diagram at the end of line `09`, before calling `triple`.](img/contour5a.png){height=42%}
+
+![Contour diagram on line `04`, at the beginning of the call to `(first a1)` from line `11` (before calling `t`).](img/contour5b.png){height=42%}
+
+![Contour diagram on line `06`, at the beginning of the call to `(second a2)` from line `12` (before calling `t`).](img/contour5c.png){height=42%}
+
+![Contour diagram on line `02`, during the call to `(second a2)` from line `12`, after applying `t` to the `lambda` on line `06`, before applying `m` to the arguments on line `02`.](img/contour5d.png){height=42%}
+
+![Contour diagram on line `06`, at the end of the call to `(second a2)` from line `12`, after applying `m` to the arguments `x y z` on line `02`.](img/contour5e.png){height=42%}
+
+![Contour diagram at the beginning of the call to `triple` on line `13`.](img/contour5f.png){height=42%}
+
+![Contour diagram at the end of execution.](img/contour5g.png){height=42%}
 
 # Meta-Circular Interpreter
 
